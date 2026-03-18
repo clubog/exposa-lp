@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exposa — Your listings. Your voice. Done.</title>
+<meta name="description" content="Exposa drafts your inquiry responses, writes your Exposés, and handles the admin — in your tone, with your listing details. For independent Makler in Berlin.">
+<style>
+  :root {
+    --bg: #FAFAF8;
+    --bg-alt: #F4F3F0;
+    --text: #1A1A1A;
+    --text-secondary: #5C5C5C;
+    --text-tertiary: #8A8A8A;
+    --accent: #BA7517;
+    --accent-bg: #BA751712;
+    --border: #D4D4D0;
+    --card-bg: #FFFFFF;
+    --btn-bg: #1A1A1A;
+    --btn-text: #FAFAF8;
+    --btn-ghost-border: #1A1A1A;
+    --tier-inactive-bg: #F4F3F0;
+    --tier-active-bg: #BA751710;
+    --tier-active-border: #BA7517;
+    --competitor-bg: #F4F3F0;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141413;
+      --bg-alt: #1E1E1C;
+      --text: #E8E8E4;
+      --text-secondary: #A8A8A4;
+      --text-tertiary: #6E6E6A;
+      --accent: #D4912A;
+      --accent-bg: #D4912A15;
+      --border: #2E2E2C;
+      --card-bg: #1A1A18;
+      --btn-bg: #E8E8E4;
+      --btn-text: #141413;
+      --btn-ghost-border: #E8E8E4;
+      --tier-inactive-bg: #1E1E1C;
+      --tier-active-bg: #D4912A12;
+      --tier-active-border: #D4912A;
+      --competitor-bg: #1E1E1C;
+    }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  /* NAV */
+  nav {
+    padding: 20px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  nav .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+  .logo span { color: var(--accent); }
+
+  /* BUTTONS */
+  .btn-primary {
+    display: inline-block;
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    padding: 12px 28px;
+    border: none;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-primary-sm {
+    padding: 9px 20px;
+    font-size: 14px;
+  }
+  .btn-ghost {
+    display: inline-block;
+    background: transparent;
+    color: var(--text);
+    padding: 12px 28px;
+    border: 1px solid var(--btn-ghost-border);
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .btn-ghost:hover { opacity: 0.7; }
+
+  /* SECTIONS */
+  section {
+    padding: 72px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .section-tag {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .section-headline {
+    font-size: 32px;
+    line-height: 1.2;
+    margin-bottom: 20px;
+  }
+
+  .section-sub {
+    font-size: 17px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 620px;
+  }
+
+  /* HERO */
+  .hero { padding: 80px 0 72px; }
+  .hero-tag {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent);
+    background: var(--accent-bg);
+    padding: 6px 14px;
+    border-radius: 3px;
+    margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-size: 48px;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+  }
+  .hero-sub {
+    font-size: 18px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 600px;
+    margin-bottom: 36px;
+  }
+  .hero-cta-group { margin-bottom: 12px; }
+  .hero-cta-note {
+    font-size: 14px;
+    color: var(--text-tertiary);
+    margin-bottom: 48px;
+  }
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+  .hero-stat {
+    padding: 20px 0;
+    border-top: 0.5px solid var(--border);
+  }
+  .hero-stat:not(:last-child) {
+    border-right: 0.5px solid var(--border);
+    padding-right: 24px;
+  }
+  .hero-stat:not(:first-child) {
+    padding-left: 24px;
+  }
+  .hero-stat-number {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 28px;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .hero-stat-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  /* POINT A */
+  .point-a-list {
+    list-style: none;
+    margin: 32px 0;
+  }
+  .point-a-list li {
+    padding: 14px 0;
+    border-bottom: 0.5px solid var(--border);
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+  .point-a-list li:first-child {
+    border-top: 0.5px solid var(--border);
+  }
+  .point-a-closing {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 18px;
+    line-height: 1.5;
+    margin-top: 32px;
+    color: var(--text);
+  }
+
+  /* SKILLS */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin-top: 40px;
+    border: 0.5px solid var(--border);
+  }
+  .skill-card {
+    background: var(--bg);
+    padding: 28px 24px;
+  }
+  .skill-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+  .skill-number {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 14px;
+    color: var(--text-tertiary);
+    margin-bottom: 10px;
+  }
+  .skill-name {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 19px;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+  .skill-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin-bottom: 14px;
+  }
+  .skill-tier {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-bg);
+    padding: 4px 10px;
+    border-radius: 2px;
+  }
+
+  /* AHA */
+  .aha-steps {
+    margin-top: 36px;
+  }
+  .aha-step {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 16px;
+    padding: 24px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .aha-step:first-child {
+    border-top: 0.5px solid var(--border);
+  }
+  .aha-step-num {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 28px;
+    color: var(--text-tertiary);
+    line-height: 1;
+    padding-top: 2px;
+  }
+  .aha-step-text {
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+  .aha-closing {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 20px;
+    line-height: 1.4;
+    margin-top: 36px;
+    color: var(--text);
+  }
+
+  /* TRUST LADDER */
+  .ladder {
+    margin-top: 40px;
+  }
+  .ladder-tier {
+    padding: 28px 24px;
+    border: 0.5px solid var(--border);
+    margin-bottom: -0.5px;
+    background: var(--tier-inactive-bg);
+  }
+  .ladder-tier.active {
+    background: var(--tier-active-bg);
+    border-color: var(--tier-active-border);
+    border-width: 1px;
+  }
+  .ladder-tier-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .ladder-tier-name {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 19px;
+    color: var(--text);
+  }
+  .ladder-tier-badge {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 2px;
+  }
+  .badge-active {
+    background: var(--accent);
+    color: #fff;
+  }
+  .badge-locked {
+    background: transparent;
+    color: var(--text-tertiary);
+    border: 1px solid var(--border);
+  }
+  .ladder-tier-desc {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin-bottom: 8px;
+  }
+  .ladder-tier-skills {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    line-height: 1.5;
+  }
+  .ladder-note {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-top: 28px;
+    line-height: 1.5;
+  }
+
+  /* VALUE */
+  .value-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin-top: 40px;
+    border: 0.5px solid var(--border);
+  }
+  .value-card {
+    background: var(--bg);
+    padding: 28px 24px;
+  }
+  .value-number {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 36px;
+    color: var(--accent);
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+  }
+  .value-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* OBJECTIONS */
+  .objections {
+    margin-top: 36px;
+  }
+  .objection {
+    padding: 28px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .objection:first-child {
+    border-top: 0.5px solid var(--border);
+  }
+  .objection-q {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 18px;
+    color: var(--text);
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+  .objection-a {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* COMPETITORS */
+  .competitors {
+    margin-top: 36px;
+  }
+  .competitor {
+    padding: 24px;
+    background: var(--competitor-bg);
+    margin-bottom: 12px;
+    border-radius: 3px;
+  }
+  .competitor-name {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 17px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .competitor-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+  .competitor-closing {
+    font-size: 16px;
+    color: var(--text);
+    margin-top: 28px;
+    line-height: 1.55;
+  }
+
+  /* PRICING */
+  .pricing-card {
+    margin-top: 40px;
+    border: 0.5px solid var(--border);
+    padding: 48px 40px;
+    text-align: center;
+  }
+  .pricing-amount {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 52px;
+    color: var(--text);
+    letter-spacing: -0.03em;
+  }
+  .pricing-amount span {
+    font-size: 20px;
+    color: var(--text-secondary);
+    font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+  }
+  .pricing-trial {
+    font-size: 15px;
+    color: var(--accent);
+    font-weight: 500;
+    margin: 8px 0 32px;
+  }
+  .pricing-features {
+    list-style: none;
+    text-align: left;
+    max-width: 400px;
+    margin: 0 auto 36px;
+  }
+  .pricing-features li {
+    padding: 10px 0;
+    font-size: 15px;
+    color: var(--text-secondary);
+    border-bottom: 0.5px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .pricing-features li:first-child {
+    border-top: 0.5px solid var(--border);
+  }
+  .pricing-check {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .pricing-cta-note {
+    font-size: 14px;
+    color: var(--text-tertiary);
+    margin-top: 16px;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 40px 0;
+  }
+  footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .footer-badge {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    border: 0.5px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 2px;
+  }
+  .footer-links {
+    display: flex;
+    gap: 24px;
+  }
+  .footer-links a {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    text-decoration: none;
+  }
+  .footer-links a:hover {
+    color: var(--text-secondary);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 34px; }
+    .hero-stats { grid-template-columns: 1fr; }
+    .hero-stat {
+      border-right: none !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+    .skills-grid { grid-template-columns: 1fr; }
+    .value-grid { grid-template-columns: 1fr; }
+    .section-headline { font-size: 26px; }
+    .pricing-card { padding: 36px 24px; }
+    .pricing-amount { font-size: 40px; }
+    footer .container {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .aha-step { grid-template-columns: 28px 1fr; gap: 12px; }
+    .ladder-tier-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="container">
+    <a href="/" class="logo">Expos<span>a</span></a>
+    <a href="#pricing" class="btn-primary btn-primary-sm">Start your free 7-day trial</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-tag">For independent Makler in Berlin</div>
+    <h1>Your listings.<br>Your voice. Done.</h1>
+    <p class="hero-sub">Exposa drafts your inquiry responses, writes your Exposés, and handles the admin — in your tone, with your listing details. You review everything before it goes anywhere.</p>
+    <div class="hero-cta-group">
+      <a href="#pricing" class="btn-primary">Start your free 7-day trial</a>
+    </div>
+    <p class="hero-cta-note">No credit card. First Exposé ready in 5 minutes.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-number">90 sec</div>
+        <div class="hero-stat-label">Per inquiry response.<br>Was 10 minutes.</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-number">5–8 hrs</div>
+        <div class="hero-stat-label">Saved per week<br>on admin work.</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-number">1 deal</div>
+        <div class="hero-stat-label">Pays for 6 months<br>of Exposa.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POINT A -->
+<section>
+  <div class="container">
+    <p class="section-tag">Be honest</p>
+    <h2 class="section-headline">Sound familiar?</h2>
+    <ul class="point-a-list">
+      <li>You posted a listing Friday evening. By Saturday morning, 80+ inquiries. Half your weekend — gone.</li>
+      <li>A serious buyer went to a competitor. Their agent replied in 20 minutes. You replied next day.</li>
+      <li>You spent four hours writing one Exposé. Then rewrote it because the owner wanted changes.</li>
+      <li>You've thought about hiring a Werkstudent. Then you thought about onboarding one.</li>
+      <li>It's 10pm. You're still answering emails. This isn't why you got your license.</li>
+    </ul>
+    <p class="point-a-closing">Every hour spent on admin is an hour not spent closing. And the longer you wait to respond, the more deals walk out the door.</p>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section>
+  <div class="container">
+    <p class="section-tag">What Exposa does</p>
+    <h2 class="section-headline">5 skills. Ready on day one. No setup.</h2>
+    <p class="section-sub">Sign up, describe your tone, connect your listings. Exposa handles the rest.</p>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-number">01</div>
+        <h3 class="skill-name">Draft inquiry responses</h3>
+        <p class="skill-desc">Reads your listing details. Writes a personalized, GDPR-safe reply to every IS24 and ImmoWelt inquiry — in your tone. Review, adjust, send.</p>
+        <span class="skill-tier">Tier 1 · You review before sending</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-number">02</div>
+        <h3 class="skill-name">Write Exposés</h3>
+        <p class="skill-desc">Paste your raw notes. Get a structured, compelling German Exposé back in 3 minutes. Not a template. A draft that sounds like you wrote it.</p>
+        <span class="skill-tier">Tier 1 · You review before sending</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-number">03</div>
+        <h3 class="skill-name">Coordinate viewings</h3>
+        <p class="skill-desc">Drafts confirmations, reminders, and follow-ups for viewing appointments. No buyer left wondering if they're confirmed.</p>
+        <span class="skill-tier">Tier 1 · You review before sending</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-number">04</div>
+        <h3 class="skill-name">Summarize documents</h3>
+        <p class="skill-desc">Upload a contract, inspection report, or floor plan. Get a structured summary in seconds. Stop re-reading 40-page PDFs.</p>
+        <span class="skill-tier">Tier 1 · You review before sending</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-number">05</div>
+        <h3 class="skill-name">Research neighborhoods</h3>
+        <p class="skill-desc">Infrastructure, transport, schools, micro-location data for any Berlin address. Ready to paste into your Exposé or send to a buyer.</p>
+        <span class="skill-tier">Tier 1 · You review before sending</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AHA MOMENT -->
+<section>
+  <div class="container">
+    <p class="section-tag">The moment it clicks</p>
+    <h2 class="section-headline">Paste an inquiry. Change two words. Hit send.</h2>
+    <div class="aha-steps">
+      <div class="aha-step">
+        <div class="aha-step-num">1</div>
+        <p class="aha-step-text">You paste an inquiry from ImmobilienScout24. A complicated one — family, specific requirements, three questions.</p>
+      </div>
+      <div class="aha-step">
+        <div class="aha-step-num">2</div>
+        <p class="aha-step-text">Exposa reads the listing, reads the inquiry, drafts a response. Correct details. Right tone. GDPR-safe.</p>
+      </div>
+      <div class="aha-step">
+        <div class="aha-step-num">3</div>
+        <p class="aha-step-text">You change two words. Hit send. 90 seconds total.</p>
+      </div>
+    </div>
+    <p class="aha-closing">That's the moment you stop thinking of it as a tool — and start thinking of it as your assistant.</p>
+  </div>
+</section>
+
+<!-- TRUST LADDER -->
+<section>
+  <div class="container">
+    <p class="section-tag">The trust ladder</p>
+    <h2 class="section-headline">You decide how far it goes.</h2>
+    <p class="section-sub">Exposa starts with zero access. You unlock each tier when — and if — you're ready.</p>
+    <div class="ladder">
+      <div class="ladder-tier active">
+        <div class="ladder-tier-header">
+          <h3 class="ladder-tier-name">Tier 1 — Day one</h3>
+          <span class="ladder-tier-badge badge-active">Active</span>
+        </div>
+        <p class="ladder-tier-desc">Exposa drafts. You review. Nothing leaves without your approval.</p>
+        <p class="ladder-tier-skills">Inquiry responses · Exposés · Viewing messages · Document summaries · Neighborhood research</p>
+      </div>
+      <div class="ladder-tier">
+        <div class="ladder-tier-header">
+          <h3 class="ladder-tier-name">Tier 2 — When you're ready</h3>
+          <span class="ladder-tier-badge badge-locked">You unlock</span>
+        </div>
+        <p class="ladder-tier-desc">Connect your calendar. Exposa schedules viewings and sends confirmations automatically.</p>
+        <p class="ladder-tier-skills">Calendar access · Automated scheduling · Viewing confirmations</p>
+      </div>
+      <div class="ladder-tier">
+        <div class="ladder-tier-header">
+          <h3 class="ladder-tier-name">Tier 3 — Full trust</h3>
+          <span class="ladder-tier-badge badge-locked">You unlock</span>
+        </div>
+        <p class="ladder-tier-desc">Connect your email. Exposa responds to inquiries directly, qualifies leads, escalates serious buyers to you.</p>
+        <p class="ladder-tier-skills">Email access · Direct responses · Lead qualification · Smart escalation</p>
+      </div>
+    </div>
+    <p class="ladder-note">Most agents stay on Tier 1 for weeks. That's fine. The ladder moves at your pace.</p>
+  </div>
+</section>
+
+<!-- VALUE -->
+<section>
+  <div class="container">
+    <p class="section-tag">What changes</p>
+    <h2 class="section-headline">Numbers that matter.</h2>
+    <div class="value-grid">
+      <div class="value-card">
+        <div class="value-number">90 sec</div>
+        <p class="value-label">Average time to review and send an inquiry response. Was 10 minutes.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-number">5–8 hrs</div>
+        <p class="value-label">Saved per week on drafting, coordinating, and researching.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-number">&lt; 2 min</div>
+        <p class="value-label">Your new response time. Buyers notice.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-number">45 min</div>
+        <p class="value-label">Saved per Exposé. From raw notes to final draft.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OBJECTIONS -->
+<section>
+  <div class="container">
+    <p class="section-tag">Straight answers</p>
+    <h2 class="section-headline">Three things you're thinking.</h2>
+    <div class="objections">
+      <div class="objection">
+        <p class="objection-q">"Is my clients' data safe?"</p>
+        <p class="objection-a">Exposa runs on German servers. No data leaves the EU. No client data is stored after processing. Built for GDPR compliance from the ground up — not bolted on after launch.</p>
+      </div>
+      <div class="objection">
+        <p class="objection-q">"What if it says something wrong?"</p>
+        <p class="objection-a">Exposa drafts. You decide. Nothing sends without your review. That's not a feature — it's the foundation. You stay in control at every tier.</p>
+      </div>
+      <div class="objection">
+        <p class="objection-q">"My clients chose me because I'm personal."</p>
+        <p class="objection-a">Exposa writes in your tone with your listing details. Your clients get a faster, more attentive version of you. Replying in 10 minutes beats replying in 10 hours. First impressions are personal too.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPETITORS -->
+<section>
+  <div class="container">
+    <p class="section-tag">What you've tried</p>
+    <h2 class="section-headline">These don't solve it.</h2>
+    <div class="competitors">
+      <div class="competitor">
+        <h3 class="competitor-name">ChatGPT</h3>
+        <p class="competitor-desc">Doesn't know your listings. You re-prompt every time. No memory, no real estate context, no Berlin market data. You're doing the work twice.</p>
+      </div>
+      <div class="competitor">
+        <h3 class="competitor-name">Email templates</h3>
+        <p class="competitor-desc">Same structure, wrong content. Every inquiry is different. Templates shift work — they don't eliminate it.</p>
+      </div>
+      <div class="competitor">
+        <h3 class="competitor-name">Werkstudent</h3>
+        <p class="competitor-desc">€15–20/hr. Needs onboarding. Not available Sunday at 9pm when the inquiries arrive. And you're still reviewing their work anyway.</p>
+      </div>
+    </div>
+    <p class="competitor-closing">Exposa knows your listings. Writes in your voice. Costs less than four hours of a student assistant per month.</p>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container">
+    <p class="section-tag">Pricing</p>
+    <h2 class="section-headline">One plan. Everything included.</h2>
+    <div class="pricing-card">
+      <div class="pricing-amount">€60 <span>/month</span></div>
+      <p class="pricing-trial">7 days free · no credit card required</p>
+      <ul class="pricing-features">
+        <li><span class="pricing-check">✓</span> All 5 skills from day one</li>
+        <li><span class="pricing-check">✓</span> Your tone, your listings, your data</li>
+        <li><span class="pricing-check">✓</span> German servers, GDPR-compliant</li>
+        <li><span class="pricing-check">✓</span> Trust ladder — unlock Tier 2 and 3 when ready</li>
+        <li><span class="pricing-check">✓</span> Email support</li>
+      </ul>
+      <a href="#" class="btn-primary">Start your free 7-day trial</a>
+      <p class="pricing-cta-note">No credit card. First Exposé ready in 5 minutes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-left">
+      <a href="/" class="logo">Expos<span>a</span></a>
+      <span class="footer-badge">DSGVO-konform · Deutsche Server</span>
+    </div>
+    <div class="footer-links">
+      <a href="#">Impressum</a>
+      <a href="#">Datenschutz</a>
+      <a href="#">AGB</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
